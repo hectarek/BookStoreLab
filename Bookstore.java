@@ -1,6 +1,9 @@
 
 import java.util.Date;
+import java.util.ArrayList;
 import java.text.*;
+import java.time.*;
+import java.io.*;
 
 public class Bookstore{
 
@@ -12,6 +15,8 @@ public class Bookstore{
 
     private boolean Open;
     private Date currentTime = new Date();
+    private ArrayList<String> titles;
+
     
     private static final int OPENING_TIME = 7 ;
     private static final int CLOSING_TIME = 20 ;
@@ -25,6 +30,10 @@ public class Bookstore{
         this.HasNewBooks = true;
         this.HasUsedBooks = true;
         this.Open = this.isOpen(currentTime); //needs to be adjusted;
+
+        //Load Titles
+        titles = new ArrayList<String>();
+        loadTitles();
     }
 
     public Bookstore(String name, String address) {
@@ -34,6 +43,10 @@ public class Bookstore{
         this.HasNewBooks = true;
         this.HasUsedBooks = true;
         this.Open = this.isOpen(currentTime); //needs to be adjusted;
+
+        //Load Titles
+        titles = new ArrayList<String>();
+        loadTitles();
     }
 
     public Bookstore(String name, String address, int sqft) {
@@ -43,12 +56,13 @@ public class Bookstore{
         this.HasNewBooks = true;
         this.HasUsedBooks = true;
         this.Open = this.isOpen(currentTime); //needs to be adjusted;
+
+        // Load Titles
+        titles = new ArrayList<String>();
+        loadTitles();
     }
 
-    public void getStoreHours() {
-        System.out.println("Store Hours are from " + OPENING_TIME + ":00 to " + CLOSING_TIME + ":00.");
-    }
-
+    
     public boolean isOpen() {
         if (Open) {
             System.out.println("Yes, the store is open right now");
@@ -73,6 +87,17 @@ public class Bookstore{
         }
     }
 
+    private void loadTitles() {
+        try {
+            Utils.loadStringsToArray(this.titles);
+        } catch (IOException e) {
+            // for now simply init the array to zero
+            System.out.println("Could not initilize the titles");
+            // make sure it is empty
+            this.titles = new ArrayList<String>();
+        }
+    }
+
     // Setter and Getter Methods
 
     //Methods for setting and getting Name
@@ -84,7 +109,7 @@ public class Bookstore{
     public void setAddress(String address) {this.Address = address;}
 
     //Methods for setting and getting SqFt
-    public int getSqFt() {System.out.println(SqFt + "sqft"); return SqFt;}
+    public int getSqFt() {System.out.println(SqFt + " sqft"); return SqFt;}
     public void setSqFt(int squareFeet) {this.SqFt = squareFeet;}
 
     //Method for setting and getting hasNewBooks
@@ -95,6 +120,19 @@ public class Bookstore{
     public boolean getHasUsedBooks(){System.out.println("Does this store have Used Books? : " + HasUsedBooks); return HasUsedBooks;}
     public void setHasUsedBooks(boolean used){this.HasUsedBooks = used;}
 
+    //Method to get store hours
+    public void getStoreHours() {
+        System.out.println("Store Hours are from " + OPENING_TIME + ":00 to " + CLOSING_TIME + ":00.");
+    }
+
+    //Method for getting titles 
+    public void getTitles () {
+        System.out.println("Beginning of Book List:");
+        for (String book : titles) {
+            System.out.println(book);
+        }
+        System.out.println("End of Book List:");
+    }
 
     public static void main(String[] args) {
         
@@ -117,7 +155,8 @@ public class Bookstore{
         hecStore.getHasNewBooks();
         hecStore.getHasUsedBooks();
 
-        
+        //Print a list of the books
+        hecStore.getTitles();
     }
 
 }
