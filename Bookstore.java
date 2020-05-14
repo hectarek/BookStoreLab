@@ -12,9 +12,9 @@ public class Bookstore{
     public int SqFt;
     public boolean HasNewBooks;
     public boolean HasUsedBooks;
+    public boolean openWeekends;
 
     private boolean open;
-    private boolean openWeekends;
     private LocalDate today = LocalDate.now();
     private int dayOfWeek = today.getDayOfWeek().getValue();
     private int currentTime = LocalTime.now().getHour();
@@ -24,7 +24,7 @@ public class Bookstore{
     private static final int OPENING_TIME = LocalTime.parse("07:00").getHour();
     private static final int CLOSING_TIME = LocalTime.parse("20:00").getHour();
 
-    //Public Methods
+    //Constructor Methods Methods
 
     public Bookstore() {
         this.Name = "Your Bookstore Name";
@@ -84,6 +84,16 @@ public class Bookstore{
         }
     }
 
+    public boolean isOpenWeekends() {
+        if (openWeekends) {
+            System.out.println("Yes, we are open weekends.");
+            return true;
+        } else {
+            System.out.println("No, we are not open weekends.");
+            return false;
+        }
+    }
+
     // Private Internal Methods
 
     private boolean isOpen(int time) {
@@ -128,10 +138,14 @@ public class Bookstore{
     public boolean getHasUsedBooks(){System.out.println("Does this store have Used Books? : " + HasUsedBooks); return HasUsedBooks;}
     public void setHasUsedBooks(boolean used){this.HasUsedBooks = used;}
 
+    //Method for setting is open weekends
+    public void setOpenWeekends(boolean answer) {this.openWeekends = answer;}
+
     //Method to get store hours
     public void getStoreHours() {
         System.out.println("Store Hours are from " + OPENING_TIME + ":00 to " + CLOSING_TIME + ":00.");
     }
+
 
     //Method for getting titles 
     public void getTitles () {
@@ -147,8 +161,13 @@ public class Bookstore{
         //Create a bookstore with properties
         Bookstore hecStore = new Bookstore("Hector's Bookstore", "123 Make Believe Ave");
 
+        //What is the name of the store?
+        hecStore.getName();
+
         //What is the address?
         hecStore.getAddress();      
+        hecStore.setAddress("234 Cherry Grove Dr.");
+        hecStore.getAddress();
         
         //Is the store open today?
         hecStore.isOpen();
