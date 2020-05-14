@@ -1,8 +1,8 @@
 
-import java.util.Date;
 import java.util.ArrayList;
-import java.text.*;
-import java.time.*;
+import java.time.LocalTime;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.io.*;
 
 public class Bookstore{
@@ -13,13 +13,16 @@ public class Bookstore{
     public boolean HasNewBooks;
     public boolean HasUsedBooks;
 
-    private boolean Open;
-    private Date currentTime = new Date();
+    private boolean open;
+    private boolean openWeekends;
+    private LocalDate today = LocalDate.now();
+    private int dayOfWeek = today.getDayOfWeek().getValue();
+    private int currentTime = LocalTime.now().getHour();
     private ArrayList<String> titles;
 
     
-    private static final int OPENING_TIME = 7 ;
-    private static final int CLOSING_TIME = 20 ;
+    private static final int OPENING_TIME = LocalTime.parse("07:00").getHour();
+    private static final int CLOSING_TIME = LocalTime.parse("20:00").getHour();
 
     //Public Methods
 
@@ -29,7 +32,8 @@ public class Bookstore{
         this.SqFt = 1300;
         this.HasNewBooks = true;
         this.HasUsedBooks = true;
-        this.Open = this.isOpen(currentTime); //needs to be adjusted;
+        this.open = this.isOpen(currentTime); //needs to be adjusted;
+        this.openWeekends = true;
 
         //Load Titles
         titles = new ArrayList<String>();
@@ -42,7 +46,8 @@ public class Bookstore{
         this.SqFt = 1000;
         this.HasNewBooks = true;
         this.HasUsedBooks = true;
-        this.Open = this.isOpen(currentTime); //needs to be adjusted;
+        this.open = this.isOpen(currentTime); //needs to be adjusted;
+        this.openWeekends = true;
 
         //Load Titles
         titles = new ArrayList<String>();
@@ -55,7 +60,8 @@ public class Bookstore{
         this.SqFt = sqft;
         this.HasNewBooks = true;
         this.HasUsedBooks = true;
-        this.Open = this.isOpen(currentTime); //needs to be adjusted;
+        this.open = this.isOpen(currentTime); //needs to be adjusted;
+        this.openWeekends = true;
 
         // Load Titles
         titles = new ArrayList<String>();
@@ -64,7 +70,12 @@ public class Bookstore{
 
     
     public boolean isOpen() {
-        if (Open) {
+
+        if (!this.openWeekends & dayOfWeek == 6 && dayOfWeek == 7) {
+            this.open = false;
+        }
+
+        if (this.open) {
             System.out.println("Yes, the store is open right now");
             return true;
         } else {
@@ -75,12 +86,9 @@ public class Bookstore{
 
     // Private Internal Methods
 
-    private boolean isOpen(Date date) {
-        SimpleDateFormat ft = new SimpleDateFormat("H");
+    private boolean isOpen(int time) {
 
-        int time = Integer.parseInt(ft.format(date));
-        
-        if (time > OPENING_TIME && time < CLOSING_TIME) {
+        if (time >= OPENING_TIME && time < CLOSING_TIME) {
             return true;
         } else {
             return false;
@@ -157,6 +165,7 @@ public class Bookstore{
 
         //Print a list of the books
         hecStore.getTitles();
+
     }
 
 }
